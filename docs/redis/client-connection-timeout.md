@@ -180,7 +180,7 @@ Spring Boot 3.5.16은 `spring.data.redis.lettuce.pool.enabled`를 적지 않았�
 
 Spring Boot가 켠 명령 만료는 기다리는 명령에도 같은 명령 타임아웃을 적용합니다. `TimeoutOptions.enabled()`는 명령 종류와 상관없이 연결에 설정한 명령 타임아웃(`spring.data.redis.timeout`)을 씁니다. Spring Data Redis의 동기 API도 같은 값만큼만 결과를 기다립니다.
 
-그래서 명령 타임아웃을 100ms로 줄이면 예시의 `BLPOP notify:queue 5`는 5초를 기다리지 못하고 100ms 뒤 클라이언트 쪽에서 타임아웃으로 실패합니다. 알림이 없는 정상 상황인데도 계속 예외가 납니다. Spring Data Redis의 `StreamMessageListenerContainer`도 기본으로 2초씩 기다리는 읽기(소비자 그룹이면 `XREADGROUP`, 아니면 `XREAD`에 `BLOCK`)를 보내므로(Redis Streams의 "Spring에서 확인할 것") 같은 문제를 만납니다.
+그래서 명령 타임아웃을 100ms로 줄이면 예시의 `BLPOP notify:queue 5`는 5초를 기다리지 못하고 100ms 뒤 클라이언트 쪽에서 타임아웃으로 실패합니다. 알림이 없는 정상 상황인데도 계속 예외가 납니다. Spring Data Redis의 `StreamMessageListenerContainer`도 기본으로 2초씩 기다리는 읽기(소비자 그룹이면 `XREADGROUP`, 아니면 `XREAD`에 `BLOCK`)를 보내므로([Redis Streams](./streams.md)의 "Spring에서 확인할 것") 같은 문제를 만납니다.
 
 선택지는 두 가지입니다.
 
