@@ -66,7 +66,7 @@
 ## 합의된 조정
 
 - 3·4는 대기열 ZSET 하나로 실험을 묶는다: 128→129개 인코딩 전환, 10만/100만/300만 ZRANK `usec_per_call`, DEL vs UNLINK, ZADD+ZRANK 동시 부하 p99.
-- 3·4는 문서 1개(09)로 끝냈다. t_zset.c 주석 발췌는 만들지 않는다. **3·4 문서는 더 늘리지 않는다.** (실험 시점은 사용자가 정함)
+- 3·4는 문서 1개(09)로 끝냈다. t_zset.c 주석 발췌는 만들지 않는다. (실험 시점은 사용자가 정함)
 - 5~8은 소스 분석보다 Spring 쪽 실험에 무게를 둔다 (DECR/Lua/MULTI/WATCH 비교, Cluster CROSSSLOT, Redisson watchdog, fencing token).
 - 6(Streams)은 축소한다: t_stream.c 분석은 빼고 XAUTOCLAIM 재처리 실험 하나만. 국내 Spring 환경은 사실상 Kafka라 가치가 낮다.
 - 9~12도 5~8처럼 소스 분석보다 Spring 실험에 무게를 두고, 주제당 실험 1개씩 한다.
