@@ -34,7 +34,7 @@
 | 13 | [dict/kvstore_발췌.c](dict/kvstore_발췌.c) | kvstore.c 1176줄 중 rehash 중인 dict 목록과 cron 진입점 발췌 (원본 + 한국어 주석) |
 | 14 | [dict/주변_발췌.c](dict/주변_발췌.c) | server.h, server.c, db.c, t_string.c, object.c, sds.h에서 dict와 맞닿은 부분 (해시 함수, resize 정책, databasesCron, GET 경로, sdslen) |
 
-### 3부: Hash와 Set의 인코딩
+### 3부: 인코딩 (주제 3·4)
 
 | 순서 | 파일 | 내용 |
 |---|---|---|
@@ -42,10 +42,16 @@
 | 15 | [06_hash_set_인코딩_흐름지도.md](06_hash_set_인코딩_흐름지도.md) | 작을 때 listpack/intset을 쓰는 이유, dict로 바뀌는 조건과 비용, **큰 Hash/Set 안의 dict가 메인 키 공간과 다른 점**, 실험 |
 | 16 | [hashset/t_set_발췌.c](hashset/t_set_발췌.c) | t_set.c 2047줄 중 인코딩 선택, 변환, 조회 + intset.c 부록 (원본 + 한국어 주석) |
 | 17 | [hashset/t_hash_발췌.c](hashset/t_hash_발췌.c) | t_hash.c 6910줄 중 listpack → dict 변환과 HSET/HGET 경로 (원본 + 한국어 주석) |
+| 18 | [encoding/object.h](encoding/object.h) | 원본 전체 (원본 + 한국어 주석). 값 객체(robj)와 kvobj 구조체, 타입별 인코딩 표 |
+| 19 | [encoding/object_발췌.c](encoding/object_발췌.c) | object.c 2028줄 중 객체 생성, String 인코딩 선택(int/embstr/raw), 해제, `OBJECT ENCODING` 발췌 (원본 + 한국어 주석) |
+| 20 | [encoding/t_string_발췌.c](encoding/t_string_발췌.c) | t_string.c 1678줄 중 `SET` 한 번에 값의 인코딩이 정해지고 바뀌는 길 + networking.c, db.c 일부 (원본 + 한국어 주석) |
+| 21 | [encoding/listpack_발췌.c](encoding/listpack_발췌.c) | listpack.c 3588줄 중 형식, 찾기, 삽입·삭제 (원본 + 한국어 주석) |
+| 22 | [encoding/t_list_발췌.c](encoding/t_list_발췌.c) | t_list.c 1756줄 중 listpack ↔ quicklist 양방향 변환과 히스테리시스 (원본 + 한국어 주석) |
+| 23 | [encoding/lazyfree_발췌.c](encoding/lazyfree_발췌.c) | lazyfree.c 391줄 + db.c 중 DEL/UNLINK 경로와 lazyfree 설정. Big Key 해제 비용 (원본 + 한국어 주석) |
 
 `ae/` 폴더의 파일은 원본 코드를 그대로 두고, 원본의 영문 주석을 한국어로 옮겼습니다(저작권·라이선스 문구만 원문 유지). `▶`로 시작하는 주석은 추가한 해설입니다. `dict/dict.h`는 원본 코드와 영문 주석을 그대로 두고 `▶` 주석만 추가했습니다. 두 경우 모두 주석을 걷어낸 코드는 원본과 같은지 확인했습니다. 단 `ae/ae.c`는 함수 블록을 읽는 순서(호출 순서)로 옮겼습니다(블록 내용은 원본과 같음).
 
-`networking/`, `server/`, `dict/`, `hashset/`의 발췌 파일은 함수를 골라 순서를 바꿨고, 긴 부분은 `▶ [생략]`으로 표시하고 뺐습니다. 뺀 부분 외의 코드는 원본과 같은지, 적어둔 원본 줄 번호가 맞는지 확인했습니다.
+`networking/`, `server/`, `dict/`, `hashset/`, `encoding/`의 발췌 파일은 함수를 골라 순서를 바꿨고, 긴 부분은 `▶ [생략]`으로 표시하고 뺐습니다. 뺀 부분 외의 코드는 원본과 같은지, 적어둔 원본 줄 번호가 맞는지 확인했습니다.
 
 ### 부록: OS 개념
 
@@ -55,11 +61,8 @@
 
 ## 다음 단계 (선택)
 
-- iothread.c: I/O 스레드와 메인 스레드가 클라이언트를 주고받는 방법
+- iothread.c: I/O 스레드와 메인 스레드가 클라이언트를 주고받는 방법, 8.0의 I/O 스레드별 이벤트루프
 - blocked.c: BLPOP 같은 블로킹 명령
 - expire.c `activeExpireCycle`: "조금씩" 원칙의 대표 예
 - aof.c `flushAppendOnlyFile`: appendfsync 정책별 차이
-- iothread.c: 8.0의 I/O 스레드별 이벤트루프
-- t_zset.c: Sorted Set의 dict + skiplist 조합
-- lazyfree.c: 큰 키를 백그라운드에서 해제하는 방법
 - memory_prefetch.c: 여러 명령의 조회를 모아 메모리를 미리 불러오는 기능
