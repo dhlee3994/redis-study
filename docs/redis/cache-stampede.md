@@ -374,7 +374,7 @@ DB에 없다는 결과도 캐시에 짧게 넣습니다. 예를 들어 `product:
 
 | 무엇을 | 어디서 | 무엇을 보는가 |
 | --- | --- | --- |
-| 캐시별 미스 수 | 애플리케이션 지표(Spring Boot는 `spring.cache.redis.enable-statistics`를 켜야 셉니다. 꺼져 있으면 지표가 0으로 보입니다. 켜는 법과 함정은 캐시 효과 재기에 있습니다) | 미스가 특정 시각에 튀는지, 그 주기가 TTL과 맞는지 |
+| 캐시별 미스 수 | 애플리케이션 지표(Spring Boot는 `spring.cache.redis.enable-statistics`를 켜야 셉니다. 꺼져 있으면 지표가 0으로 보입니다. 켜는 법과 함정은 [캐시 효과 재기](./cache-effectiveness.md)에 있습니다) | 미스가 특정 시각에 튀는지, 그 주기가 TTL과 맞는지 |
 | 서버 전체의 히트·미스 | Redis `INFO stats`의 `keyspace_hits`, `keyspace_misses` | 서버 전체의 읽기 조회를 세므로 캐시 키와 다른 키가 섞입니다. 추세를 볼 때만 씁니다 |
 | 만료와 축출 | `INFO stats`의 `expired_keys`, `evicted_keys` | 미스가 튄 시각에 만료가 몰렸는지, 축출이 늘었는지 |
 | DB 쪽 | DB 초당 쿼리 수, 같은 쿼리의 동시 실행 수 | 같은 상품 조회가 같은 순간에 여러 번 실행되는지 |
