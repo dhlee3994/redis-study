@@ -241,7 +241,7 @@ TTL은 키 하나에 붙는 것이 기본입니다. Hash는 필드마다 만료�
 
 ### Spring에서 확인할 것
 
-- **`RedisCacheManager`의 기본 설정은 TTL 없음입니다.** `RedisCacheManager.create(...)`와 빌더 모두 `defaultCacheConfig()`를 씁니다. `cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(...))`처럼 TTL을 정했는지 확인합니다. 캐시마다 TTL을 정하는 방법과 그 함정은 Spring `@Cacheable`의 함정에서 다룹니다.
+- **`RedisCacheManager`의 기본 설정은 TTL 없음입니다.** `RedisCacheManager.create(...)`와 빌더 모두 `defaultCacheConfig()`를 씁니다. `cacheDefaults(RedisCacheConfiguration.defaultCacheConfig().entryTtl(...))`처럼 TTL을 정했는지 확인합니다. 캐시마다 TTL을 정하는 방법과 그 함정은 [Spring `@Cacheable`의 함정](./spring-cacheable.md)에서 다룹니다.
 - **`entryTtl`과 함께 `enableTimeToIdle()`을 켜면 읽을 때마다 TTL을 늘립니다.** TTL이 정해져 있으면 캐시를 읽을 때 `GETEX`로 TTL을 다시 정하므로(TTL이 없는 기본 설정에서는 그냥 `GET`입니다), 자주 읽히는 항목은 계속 살아남습니다. 원본이 바뀌어도 자주 읽히는 캐시는 만료로 갱신되지 않으므로, 갱신은 따로 무효화해야 합니다.
 - **`opsForValue().set(key, value)`는 TTL을 지웁니다.** TTL이 필요한 키는 시간을 함께 넘기는 오버로드를 씁니다.
 
