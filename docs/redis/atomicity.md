@@ -225,7 +225,7 @@ WATCH는 낙관적 방식입니다. 읽을 때의 상태를 기억해 두고, �
 - 기본값은 5,000밀리초(5초)이고, 예전 이름 `lua-time-limit`도 별칭으로 남아 있습니다.
 - 스크립트가 이 시간을 넘기면 Redis는 "Slow script detected" 경고를 로그에 남깁니다. 그다음 스크립트 실행 중간중간에 다른 연결의 요청을 받아 **`BUSY` 에러로 응답하기 시작합니다**. 스크립트 자체는 계속 실행됩니다. 공식 문서도 "When a script reaches the timeout threshold, it isn't terminated by Redis automatically"라고 설명합니다.
 - 이 상태에서 받는 명령은 `SCRIPT KILL`, `FUNCTION KILL`, `SHUTDOWN NOSAVE` 등 일부뿐입니다.
-- `SCRIPT KILL`은 **스크립트가 아직 쓰기 명령을 실행하지 않았을 때만** 성공합니다. 이미 썼다면 `UNKILLABLE` 에러가 납니다. 그때는 끝나기를 기다리거나 `SHUTDOWN NOSAVE`로 서버를 내려야 합니다. 쓰기 후에 스크립트를 중간에 멈추면 반쯤 반영된 상태가 남아 원자성이 깨지기 때문입니다. `SHUTDOWN NOSAVE`는 종료 때의 RDB 저장을 건너뛰고 서버 프로세스를 끝내므로(AOF를 켰다면 AOF 내려 쓰기는 그대로 합니다), 영속화 설정에 따라 마지막 저장 이후의 변경을 잃을 수 있습니다. 설정별로 무엇이 남는지는 Redis 영속성에서 다룹니다.
+- `SCRIPT KILL`은 **스크립트가 아직 쓰기 명령을 실행하지 않았을 때만** 성공합니다. 이미 썼다면 `UNKILLABLE` 에러가 납니다. 그때는 끝나기를 기다리거나 `SHUTDOWN NOSAVE`로 서버를 내려야 합니다. 쓰기 후에 스크립트를 중간에 멈추면 반쯤 반영된 상태가 남아 원자성이 깨지기 때문입니다. `SHUTDOWN NOSAVE`는 종료 때의 RDB 저장을 건너뛰고 서버 프로세스를 끝내므로(AOF를 켰다면 AOF 내려 쓰기는 그대로 합니다), 영속화 설정에 따라 마지막 저장 이후의 변경을 잃을 수 있습니다. 설정별로 무엇이 남는지는 [Redis 영속성](./persistence.md)에서 다룹니다.
 
 ### 대가 2: 중간에 에러가 나도 이미 한 쓰기는 되돌리지 않습니다
 
