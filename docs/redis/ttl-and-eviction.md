@@ -95,7 +95,7 @@ TTL은 키 하나에 붙는 것이 기본입니다. Hash는 필드마다 만료�
 
 그래서 메모리는 잠시 한도를 넘을 수 있습니다. 명령 하나가 실행되는 동안 쓴 메모리는 다음 명령이 올 때 정리되기 때문입니다. 공식 문서도 큰 집합 연산 결과를 저장하는 것처럼 데이터를 많이 더하는 명령은 한도를 눈에 띄게 넘길 수 있다고 적습니다(공식 문서 eviction, 첫 부분).
 
-연결의 응답 버퍼도 `used_memory`에 들어가고 축출 판단에서 빠지지 않습니다. 이것은 소스에서 나온 해석입니다. 큰 응답이 버퍼에 쌓이면, 키 데이터는 그대로인데 메모리가 한도를 넘어 키가 축출될 수 있습니다. Hot Key와 Big Key의 큰 응답이 이 경로로 다른 키를 밀어낼 수 있습니다.
+연결의 응답 버퍼도 `used_memory`에 들어가고 축출 판단에서 빠지지 않습니다. 이것은 소스에서 나온 해석입니다. 큰 응답이 버퍼에 쌓이면, 키 데이터는 그대로인데 메모리가 한도를 넘어 키가 축출될 수 있습니다. [Hot Key와 Big Key](./hot-key-big-key.md)의 큰 응답이 이 경로로 다른 키를 밀어낼 수 있습니다.
 
 ### 얼마나: 한도 아래로 내려갈 때까지, 단 한 번에 오래는 아니게
 
@@ -112,7 +112,7 @@ TTL은 키 하나에 붙는 것이 기본입니다. Hash는 필드마다 만료�
 
 그리고 **`noeviction`**(기본값)은 아무것도 지우지 않습니다.
 
-- **LRU**(Least Recently Used)는 마지막으로 쓴 지 가장 오래된 키를, **LFU**(Least Frequently Used)는 최근 접근 빈도가 가장 낮은 키를 고릅니다. LFU 빈도 카운터가 어떻게 오르고 줄어드는지는 Hot Key와 Big Key에 있습니다.
+- **LRU**(Least Recently Used)는 마지막으로 쓴 지 가장 오래된 키를, **LFU**(Least Frequently Used)는 최근 접근 빈도가 가장 낮은 키를 고릅니다. LFU 빈도 카운터가 어떻게 오르고 줄어드는지는 [Hot Key와 Big Key](./hot-key-big-key.md)에 있습니다.
 - **LRU·LFU·`volatile-ttl`은 정확한 순위가 아니라 표본에서 고릅니다.** Redis는 모든 키를 정렬하지 않습니다. 키를 `maxmemory-samples`개(기본 5개)씩 무작위로 뽑고, 뽑을 때마다 지울 만한 후보 몇 개를 추려 두었다가 그중 가장 지울 만한 키를 지웁니다. 공식 문서는 표본 수를 늘리면 진짜 LRU에 가까워지는 대신 CPU를 더 쓴다고 적습니다(공식 문서 eviction, "Approximated LRU algorithm"). 그래서 "가장 오래 안 쓴 키가 반드시 먼저 사라진다"고 기대하면 안 됩니다. `random` 정책은 표본을 비교하지 않고 후보 범위에서 무작위로 하나를 바로 고릅니다.
 - **후보가 없으면 `noeviction`처럼 됩니다.** `volatile-*` 정책에서 TTL 있는 키가 하나도 없으면 지울 것이 없습니다. 공식 문서도 "The `volatile-xxx` policies behave like `noeviction` if no keys have an associated expiration"이라고 적습니다(공식 문서 eviction, "Eviction policies").
 
